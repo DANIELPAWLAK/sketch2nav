@@ -1,0 +1,17 @@
+[0.375s] Invoking command in '/home/pawlak/sketch2nav/ros2ws/build/demo_teleop': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/pawlak/sketch2nav/ros2ws/build/demo_teleop/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/pawlak/sketch2nav/ros2ws/install/demo_teleop/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/pawlak/sketch2nav/ros2ws/build/demo_teleop/build --no-deps symlink_data
+[0.484s] running develop
+[0.539s] running egg_info
+[0.545s] writing demo_teleop.egg-info/PKG-INFO
+[0.545s] writing dependency_links to demo_teleop.egg-info/dependency_links.txt
+[0.545s] writing entry points to demo_teleop.egg-info/entry_points.txt
+[0.545s] writing requirements to demo_teleop.egg-info/requires.txt
+[0.545s] writing top-level names to demo_teleop.egg-info/top_level.txt
+[0.556s] reading manifest file 'demo_teleop.egg-info/SOURCES.txt'
+[0.556s] writing manifest file 'demo_teleop.egg-info/SOURCES.txt'
+[0.562s] running build_ext
+[0.562s] Creating /home/pawlak/sketch2nav/ros2ws/install/demo_teleop/lib/python3.12/site-packages/demo-teleop.egg-link (link to .)
+[0.562s] Installing teleop script to /home/pawlak/sketch2nav/ros2ws/install/demo_teleop/lib/demo_teleop
+[0.562s] 
+[0.562s] Installed /home/pawlak/sketch2nav/ros2ws/build/demo_teleop
+[0.562s] running symlink_data
+[0.581s] Invoked command in '/home/pawlak/sketch2nav/ros2ws/build/demo_teleop' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/pawlak/sketch2nav/ros2ws/build/demo_teleop/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/pawlak/sketch2nav/ros2ws/install/demo_teleop/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/pawlak/sketch2nav/ros2ws/build/demo_teleop/build --no-deps symlink_data

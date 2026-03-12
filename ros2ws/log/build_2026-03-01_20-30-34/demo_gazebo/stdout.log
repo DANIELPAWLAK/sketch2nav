@@ -1,0 +1,27 @@
+running develop
+running egg_info
+creating demo_gazebo.egg-info
+writing demo_gazebo.egg-info/PKG-INFO
+writing dependency_links to demo_gazebo.egg-info/dependency_links.txt
+writing requirements to demo_gazebo.egg-info/requires.txt
+writing top-level names to demo_gazebo.egg-info/top_level.txt
+writing manifest file 'demo_gazebo.egg-info/SOURCES.txt'
+reading manifest file 'demo_gazebo.egg-info/SOURCES.txt'
+writing manifest file 'demo_gazebo.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/pawlak/sketch2nav/ros2ws/install/demo_gazebo/lib/python3.12/site-packages/demo-gazebo.egg-link (link to .)
+
+Installed /home/pawlak/sketch2nav/ros2ws/build/demo_gazebo
+running symlink_data
+creating /home/pawlak/sketch2nav/ros2ws/install/demo_gazebo/share/ament_index
+creating /home/pawlak/sketch2nav/ros2ws/install/demo_gazebo/share/ament_index/resource_index
+creating /home/pawlak/sketch2nav/ros2ws/install/demo_gazebo/share/ament_index/resource_index/packages
+symbolically linking /home/pawlak/sketch2nav/ros2ws/build/demo_gazebo/resource/demo_gazebo -> /home/pawlak/sketch2nav/ros2ws/install/demo_gazebo/share/ament_index/resource_index/packages
+symbolically linking /home/pawlak/sketch2nav/ros2ws/build/demo_gazebo/package.xml -> /home/pawlak/sketch2nav/ros2ws/install/demo_gazebo/share/demo_gazebo
+creating /home/pawlak/sketch2nav/ros2ws/install/demo_gazebo/share/demo_gazebo/launch
+symbolically linking /home/pawlak/sketch2nav/ros2ws/build/demo_gazebo/launch/sim.launch.py -> /home/pawlak/sketch2nav/ros2ws/install/demo_gazebo/share/demo_gazebo/launch
+creating /home/pawlak/sketch2nav/ros2ws/install/demo_gazebo/share/demo_gazebo/worlds
+symbolically linking /home/pawlak/sketch2nav/ros2ws/build/demo_gazebo/worlds/empty.sdf -> /home/pawlak/sketch2nav/ros2ws/install/demo_gazebo/share/demo_gazebo/worlds
+creating /home/pawlak/sketch2nav/ros2ws/install/demo_gazebo/share/demo_gazebo/models
+creating /home/pawlak/sketch2nav/ros2ws/install/demo_gazebo/share/demo_gazebo/models/demo
+symbolically linking /home/pawlak/sketch2nav/ros2ws/build/demo_gazebo/models/demo/model.sdf -> /home/pawlak/sketch2nav/ros2ws/install/demo_gazebo/share/demo_gazebo/models/demo

@@ -1,0 +1,8 @@
+Metadata-Version: 2.1
+Name: demo-gazebo
+Version: 0.0.1
+Summary: TODO: Package description
+Maintainer: pawlak
+Maintainer-email: danielpawlak@github.com
+License: TODO: License declaration
+Provides-Extra: test

@@ -1,0 +1,15 @@
+[0.378s] Invoking command in '/home/pawlak/sketch2nav/ros2ws/build/demo_gazebo': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/pawlak/sketch2nav/ros2ws/build/demo_gazebo/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/pawlak/sketch2nav/ros2ws/install/demo_gazebo/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/pawlak/sketch2nav/ros2ws/build/demo_gazebo/build --no-deps symlink_data
+[0.487s] running develop
+[0.543s] running egg_info
+[0.548s] writing demo_gazebo.egg-info/PKG-INFO
+[0.548s] writing dependency_links to demo_gazebo.egg-info/dependency_links.txt
+[0.548s] writing requirements to demo_gazebo.egg-info/requires.txt
+[0.548s] writing top-level names to demo_gazebo.egg-info/top_level.txt
+[0.559s] reading manifest file 'demo_gazebo.egg-info/SOURCES.txt'
+[0.559s] writing manifest file 'demo_gazebo.egg-info/SOURCES.txt'
+[0.565s] running build_ext
+[0.565s] Creating /home/pawlak/sketch2nav/ros2ws/install/demo_gazebo/lib/python3.12/site-packages/demo-gazebo.egg-link (link to .)
+[0.565s] 
+[0.565s] Installed /home/pawlak/sketch2nav/ros2ws/build/demo_gazebo
+[0.565s] running symlink_data
+[0.580s] Invoked command in '/home/pawlak/sketch2nav/ros2ws/build/demo_gazebo' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/pawlak/sketch2nav/ros2ws/build/demo_gazebo/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/pawlak/sketch2nav/ros2ws/install/demo_gazebo/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/pawlak/sketch2nav/ros2ws/build/demo_gazebo/build --no-deps symlink_data
