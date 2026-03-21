@@ -8,7 +8,7 @@ from rclpy.node import Node
 from geometry_msgs.msg import Twist
 
 
-def get_key(timeout: float = 0.05) -> str:
+def grabKey(timeout: float = 0.05) -> str:
     """Non-blocking single key read from stdin."""
     dr, _, _ = select.select([sys.stdin], [], [], timeout)
     if dr:
@@ -20,53 +20,60 @@ class Teleop(Node):
     def __init__(self):
         super().__init__("teleop")
 
-        self.declare_parameter("linear_step", 0.15)
-        self.declare_parameter("angular_step", 0.6)
-        self.declare_parameter("publish_rate_hz", 20.0)
+        self.declare_parameter("linearSpeed", 0.6)
+        self.declare_parameter("angularSpeed", 0.6)
+        self.declare_parameter("publishRate", 20.0)
 
-        self.linear_step = float(self.get_parameter("linear_step").value)
-        self.angular_step = float(self.get_parameter("angular_step").value)
-        rate_hz = float(self.get_parameter("publish_rate_hz").value)
+        self.linearSpeed = float(self.get_parameter("linearSpeed").value)
+        self.angularSpeed = float(self.get_parameter("angularSpeed").value)
+        rate_hz = float(self.get_parameter("publishRate").value)
 
         self.pub = self.create_publisher(Twist, "/cmd_vel", 10)
-
-        self.v = 0.0
-        self.w = 0.0
-
         self.timer = self.create_timer(1.0 / rate_hz, self.on_timer)
 
         self.get_logger().info(
             "Teleop:\n"
-            "  W/S: forward/back\n"
-            "  A/D: left/right (yaw)\n"
+            "  W: forward\n"
+            "  S: backward\n"
+            "  A: pivot left\n"
+            "  D: pivot right\n"
             "  Space: stop\n"
             "  Q: quit\n"
         )
 
     def on_timer(self):
-        key = get_key()
+        key = grabKey
+    ()
+
+        msg = Twist()
 
         if key in ("w", "W"):
-            self.v += self.linear_step
+            msg.linear.x = self.linearSpeed
+            msg.angular.z = 0.0
+
         elif key in ("s", "S"):
-            self.v -= self.linear_step
+            msg.linear.x = -self.linearSpeed
+            msg.angular.z = 0.0
+
         elif key in ("a", "A"):
-            self.w += self.angular_step
+            msg.linear.x = 0.0
+            msg.angular.z = self.angularSpeed
+
         elif key in ("d", "D"):
-            self.w -= self.angular_step
+            msg.linear.x = 0.0
+            msg.angular.z = -self.angularSpeed
+
         elif key == " ":
-            self.v = 0.0
-            self.w = 0.0
+            msg.linear.x = 0.0
+            msg.angular.z = 0.0
+
         elif key in ("q", "Q"):
             raise KeyboardInterrupt
 
-        # Clamp (keeps it controllable)
-        self.v = max(min(self.v, 1.0), -1.0)
-        self.w = max(min(self.w, 3.0), -3.0)
+        else:
+            msg.linear.x = 0.0
+            msg.angular.z = 0.0
 
-        msg = Twist()
-        msg.linear.x = float(self.v)
-        msg.angular.z = float(self.w)
         self.pub.publish(msg)
 
 
