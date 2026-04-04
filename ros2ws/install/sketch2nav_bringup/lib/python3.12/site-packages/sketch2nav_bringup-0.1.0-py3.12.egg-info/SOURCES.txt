@@ -1,0 +1,17 @@
+package.xml
+setup.cfg
+setup.py
+../../build/sketch2nav_bringup/sketch2nav_bringup.egg-info/PKG-INFO
+../../build/sketch2nav_bringup/sketch2nav_bringup.egg-info/SOURCES.txt
+../../build/sketch2nav_bringup/sketch2nav_bringup.egg-info/dependency_links.txt
+../../build/sketch2nav_bringup/sketch2nav_bringup.egg-info/requires.txt
+../../build/sketch2nav_bringup/sketch2nav_bringup.egg-info/top_level.txt
+../../build/sketch2nav_bringup/sketch2nav_bringup.egg-info/zip-safe
+launch/bringup.launch.py
+models/sketch2nav/model.sdf
+resource/sketch2nav_bringup
+sketch2nav_bringup/__init__.py
+test/test_copyright.py
+test/test_flake8.py
+test/test_pep257.py
+worlds/empty.sdf

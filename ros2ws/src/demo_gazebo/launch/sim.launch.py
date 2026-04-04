@@ -18,7 +18,8 @@ def generate_launch_description():
              "-file", model,
              "-x", "0",
              "-y", "0",
-             "-z", "0.13"],
+             "-z", "0.13",
+             ],
         output="screen"
     )
     #Bridge ros2 and gazebo twists and odoms on cmd_vel topic

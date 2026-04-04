@@ -1,0 +1,22 @@
+running egg_info
+writing ../../build/sketch2nav_control/sketch2nav_control.egg-info/PKG-INFO
+writing dependency_links to ../../build/sketch2nav_control/sketch2nav_control.egg-info/dependency_links.txt
+writing entry points to ../../build/sketch2nav_control/sketch2nav_control.egg-info/entry_points.txt
+writing requirements to ../../build/sketch2nav_control/sketch2nav_control.egg-info/requires.txt
+writing top-level names to ../../build/sketch2nav_control/sketch2nav_control.egg-info/top_level.txt
+reading manifest file '../../build/sketch2nav_control/sketch2nav_control.egg-info/SOURCES.txt'
+writing manifest file '../../build/sketch2nav_control/sketch2nav_control.egg-info/SOURCES.txt'
+running build
+running build_py
+running install
+running install_lib
+running install_data
+creating /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_control/share/sketch2nav_control/launch
+copying launch/control.launch.py -> /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_control/share/sketch2nav_control/launch
+creating /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_control/share/sketch2nav_control/config
+copying config/params.yaml -> /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_control/share/sketch2nav_control/config
+running install_egg_info
+Copying ../../build/sketch2nav_control/sketch2nav_control.egg-info to /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_control/lib/python3.12/site-packages/sketch2nav_control-0.1.0-py3.12.egg-info
+running install_scripts
+Installing pure_pursuit script to /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_control/lib/sketch2nav_control
+writing list of installed files to '/home/pawlak/sketch2nav/ros2ws/build/sketch2nav_control/install.log'

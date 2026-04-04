@@ -1,0 +1,5 @@
+  File "/home/pawlak/sketch2nav/ros2ws/install/sketch2nav_control/lib/python3.12/site-packages/sketch2nav_control/pure_pursuit.py", line 117
+    return
+    ^^^^^^
+SyntaxError: 'return' outside function
+

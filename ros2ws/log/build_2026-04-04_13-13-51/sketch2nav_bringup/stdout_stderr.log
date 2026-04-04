@@ -1,0 +1,37 @@
+running egg_info
+creating ../../build/sketch2nav_bringup/sketch2nav_bringup.egg-info
+writing ../../build/sketch2nav_bringup/sketch2nav_bringup.egg-info/PKG-INFO
+writing dependency_links to ../../build/sketch2nav_bringup/sketch2nav_bringup.egg-info/dependency_links.txt
+writing requirements to ../../build/sketch2nav_bringup/sketch2nav_bringup.egg-info/requires.txt
+writing top-level names to ../../build/sketch2nav_bringup/sketch2nav_bringup.egg-info/top_level.txt
+writing manifest file '../../build/sketch2nav_bringup/sketch2nav_bringup.egg-info/SOURCES.txt'
+reading manifest file '../../build/sketch2nav_bringup/sketch2nav_bringup.egg-info/SOURCES.txt'
+writing manifest file '../../build/sketch2nav_bringup/sketch2nav_bringup.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/pawlak/sketch2nav/ros2ws/build/sketch2nav_bringup/build
+creating /home/pawlak/sketch2nav/ros2ws/build/sketch2nav_bringup/build/lib
+creating /home/pawlak/sketch2nav/ros2ws/build/sketch2nav_bringup/build/lib/sketch2nav_bringup
+copying sketch2nav_bringup/__init__.py -> /home/pawlak/sketch2nav/ros2ws/build/sketch2nav_bringup/build/lib/sketch2nav_bringup
+running install
+running install_lib
+creating /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/lib/python3.12/site-packages/sketch2nav_bringup
+copying /home/pawlak/sketch2nav/ros2ws/build/sketch2nav_bringup/build/lib/sketch2nav_bringup/__init__.py -> /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/lib/python3.12/site-packages/sketch2nav_bringup
+byte-compiling /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/lib/python3.12/site-packages/sketch2nav_bringup/__init__.py to __init__.cpython-312.pyc
+running install_data
+creating /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/share/ament_index
+creating /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/share/ament_index/resource_index
+creating /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/share/ament_index/resource_index/packages
+copying resource/sketch2nav_bringup -> /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/share/ament_index/resource_index/packages
+copying package.xml -> /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/share/sketch2nav_bringup
+creating /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/share/sketch2nav_bringup/launch
+creating /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/share/sketch2nav_bringup/worlds
+copying worlds/empty.sdf -> /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/share/sketch2nav_bringup/worlds
+creating /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/share/sketch2nav_bringup/models
+creating /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/share/sketch2nav_bringup/models/sketch2nav
+copying models/sketch2nav/model.sdf -> /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/share/sketch2nav_bringup/models/sketch2nav
+creating /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/share/sketch2nav_bringup/config
+running install_egg_info
+Copying ../../build/sketch2nav_bringup/sketch2nav_bringup.egg-info to /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/lib/python3.12/site-packages/sketch2nav_bringup-0.1.0-py3.12.egg-info
+running install_scripts
+writing list of installed files to '/home/pawlak/sketch2nav/ros2ws/build/sketch2nav_bringup/install.log'

@@ -1,0 +1,4 @@
+source;share/sketch2nav_bringup/hook/pythonpath.dsv
+source;share/sketch2nav_bringup/hook/pythonpath.sh
+source;share/sketch2nav_bringup/hook/ament_prefix_path.dsv
+source;share/sketch2nav_bringup/hook/ament_prefix_path.sh

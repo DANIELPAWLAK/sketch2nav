@@ -1,0 +1,2 @@
+[console_scripts]
+pure_pursuit = sketch2nav_control.pure_pursuit:main
