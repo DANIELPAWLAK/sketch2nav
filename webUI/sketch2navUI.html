@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sketch2nav</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/eventemitter2/6.4.9/eventemitter2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/roslib@1.3.0/build/roslib.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;700;800&display=swap');
+
+  :root {
+    --bg:          #0a0b0e;
+    --panel:       #10121a;
+    --border:      #1e2030;
+    --accent:      #7c6fcd;
+    --accent-dim:  rgba(124,111,205,0.13);
+    --accent-mid:  rgba(124,111,205,0.38);
+    --accent-bright: #9d92e0;
+    --warn:        #e07c6f;
+    --warn-dim:    rgba(224,124,111,0.15);
+    --text:        #e8e9f0;
+    --muted:       #555870;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'DM Mono', monospace;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 52px 1fr;
+    grid-template-columns: 265px 1fr;
+    overflow: hidden;
+  }
+
+  header {
+    grid-column: 1 / -1;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center;
+    padding: 0 20px; gap: 14px;
+    background: var(--panel);
+  }
+
+  .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 17px; letter-spacing: -0.5px; color: var(--text); }
+  .logo span { color: var(--accent-bright); }
+
+  .status-pill {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--border); border: 1px solid var(--border);
+    border-radius: 20px; padding: 4px 10px; font-size: 11px;
+    color: var(--muted); transition: all 0.3s;
+  }
+  .status-pill.connected { background: var(--accent-dim); border-color: var(--accent-mid); color: var(--accent-bright); }
+  .status-pill.error     { background: var(--warn-dim); border-color: rgba(224,124,111,0.4); color: var(--warn); }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .dot.pulse { animation: pulse 1.5s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .header-right { margin-left: auto; display: flex; align-items: center; font-size: 11px; color: var(--muted); }
+  .odom-display { display: flex; gap: 14px; }
+  .odom-val { color: var(--text); }
+
+  aside {
+    background: var(--panel); border-right: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    padding: 16px; gap: 14px; overflow-y: auto;
+  }
+
+  .section-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+
+  .tool-group { display: flex; flex-direction: column; gap: 3px; }
+
+  .tool-btn {
+    display: flex; align-items: center; gap: 10px; padding: 9px 12px;
+    border-radius: 6px; border: 1px solid transparent; background: transparent;
+    color: var(--muted); font-family: 'DM Mono', monospace; font-size: 12px;
+    cursor: pointer; transition: all 0.15s; text-align: left;
+  }
+  .tool-btn:hover { background: var(--border); color: var(--text); }
+  .tool-btn.active { background: var(--accent-dim); border-color: var(--accent-mid); color: var(--accent-bright); }
+  .tool-icon { width: 16px; height: 16px; flex-shrink: 0; opacity: 0.6; }
+  .tool-btn.active .tool-icon { opacity: 1; }
+
+  .divider { height: 1px; background: var(--border); flex-shrink: 0; }
+
+  .param-row { display: flex; flex-direction: column; gap: 5px; }
+  .param-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); }
+  .param-label span { color: var(--text); }
+  input[type=range] { -webkit-appearance: none; width: 100%; height: 3px; background: var(--border); border-radius: 2px; outline: none; cursor: pointer; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%; background: var(--accent-bright); cursor: pointer; }
+
+  .connect-row { display: flex; gap: 6px; }
+  .connect-row input {
+    flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 5px;
+    color: var(--text); font-family: 'DM Mono', monospace; font-size: 11px;
+    padding: 7px 10px; outline: none; transition: border-color 0.2s;
+  }
+  .connect-row input:focus { border-color: var(--accent-mid); }
+  .connect-row button {
+    padding: 7px 12px; background: var(--accent-dim); border: 1px solid var(--accent-mid);
+    border-radius: 5px; color: var(--accent-bright); font-family: 'DM Mono', monospace;
+    font-size: 11px; cursor: pointer; transition: all 0.15s;
+  }
+  .connect-row button:hover { background: rgba(124,111,205,0.25); }
+
+  .action-btn {
+    width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border);
+    background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace;
+    font-size: 12px; cursor: pointer; transition: all 0.2s; letter-spacing: 0.3px;
+  }
+  .action-btn:hover { border-color: var(--muted); }
+  .action-btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 500; }
+  .action-btn.primary:hover { background: var(--accent-bright); border-color: var(--accent-bright); }
+  .action-btn.primary:disabled {
+    background: var(--accent-dim); border-color: var(--accent-mid);
+    color: var(--accent-bright); cursor: not-allowed; opacity: 0.5;
+  }
+  .action-btn.stop { border-color: rgba(224,124,111,0.35); color: var(--warn); }
+  .action-btn.stop:hover { background: var(--warn-dim); border-color: var(--warn); }
+
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .stat-box { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; }
+  .stat-box .label { font-size: 9px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+  .stat-box .value { font-size: 14px; color: var(--text); margin-top: 2px; }
+
+  .log {
+    flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
+    padding: 8px; font-size: 10px; overflow-y: auto; display: flex;
+    flex-direction: column; gap: 2px; min-height: 80px; max-height: 130px;
+  }
+  .log-entry { color: var(--muted); }
+  .log-entry.ok  { color: var(--accent-bright); }
+  .log-entry.err { color: var(--warn); }
+
+  main { position: relative; overflow: hidden; background: var(--bg); cursor: crosshair; }
+
+  canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+  #robot-marker {
+    position: absolute; width: 20px; height: 20px;
+    margin-left: -10px; margin-top: -10px;
+    pointer-events: none; transition: left 0.08s linear, top 0.08s linear; display: none;
+  }
+
+  .coord-readout {
+    position: absolute; bottom: 16px; right: 16px; font-size: 10px; color: var(--muted);
+    background: rgba(10,11,14,0.85); padding: 6px 10px;
+    border-radius: 4px; border: 1px solid var(--border); pointer-events: none;
+  }
+
+  .flash { position: absolute; inset: 0; background: rgba(124,111,205,0.05); pointer-events: none; opacity: 0; transition: opacity 0.5s; }
+  .flash.show { opacity: 1; transition: none; }
+
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: var(--muted); }
+  .toggle { position: relative; width: 28px; height: 16px; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider { position: absolute; inset: 0; background: var(--border); border-radius: 8px; cursor: pointer; transition: 0.2s; }
+  .toggle-slider::after { content: ''; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 50%; background: var(--muted); transition: 0.2s; }
+  .toggle input:checked + .toggle-slider { background: var(--accent-mid); }
+  .toggle input:checked + .toggle-slider::after { transform: translateX(12px); background: var(--accent-bright); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">sketch<span>2</span>nav</div>
+  <div class="status-pill" id="status-pill">
+    <div class="dot" id="status-dot"></div>
+    <span id="status-text">disconnected</span>
+  </div>
+  <div class="header-right">
+    <div class="odom-display">
+      <span>x <span class="odom-val" id="odom-x">—</span></span>
+      <span>y <span class="odom-val" id="odom-y">—</span></span>
+      <span>θ <span class="odom-val" id="odom-th">—</span></span>
+    </div>
+  </div>
+</header>
+
+<aside>
+  <div>
+    <div class="section-label">Connection</div>
+    <div class="connect-row">
+      <input type="text" id="ws-url" value="ws://localhost:9090" />
+      <button onclick="connectROS()">connect</button>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div>
+    <div class="section-label">Tool</div>
+    <div class="tool-group">
+      <button class="tool-btn active" id="tool-draw" onclick="setTool('draw')">
+        <svg class="tool-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M2 14L5 11L13 3a1.414 1.414 0 00-2-2L3 9 2 14z"/>
+        </svg>
+        draw path
+      </button>
+      <button class="tool-btn" id="tool-obstacle">
+        <svg class="tool-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="2" y="2" width="12" height="12" rx="2"/>
+          <path d="M2 8h12M8 2v12" stroke-width="1"/>
+        </svg>
+        draw obstacle
+        <span style="font-size:9px;color:var(--muted);margin-left:auto">soon</span>
+      </button>
+      <button class="tool-btn" onclick="clearCanvas()">
+        <svg class="tool-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M3 13L13 3M10 13H13M3 6l7 7"/>
+        </svg>
+        clear
+      </button>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div>
+    <div class="section-label">Parameters</div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="param-row">
+        <div class="param-label">lookahead dist <span id="val-lookahead">0.50 m</span></div>
+        <input type="range" id="sl-lookahead" min="0.1" max="2.0" step="0.05" value="0.5"
+               oninput="onSliderChange()">
+      </div>
+      <div class="param-row">
+        <div class="param-label">max speed <span id="val-speed">0.30 m/s</span></div>
+        <input type="range" id="sl-speed" min="0.05" max="1.0" step="0.05" value="0.3"
+               oninput="onSliderChange()">
+      </div>
+      <div class="param-row">
+        <div class="param-label">world scale <span id="val-scale">0.10 m/px</span></div>
+        <input type="range" id="sl-scale" min="0.01" max="0.5" step="0.01" value="0.1"
+               oninput="onScaleChange()">
+      </div>
+      <div class="toggle-row">
+        <span>smooth path</span>
+        <label class="toggle">
+          <input type="checkbox" id="smooth-toggle" checked>
+          <div class="toggle-slider"></div>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <button class="action-btn primary" id="send-btn" onclick="sendPath()" disabled>send path</button>
+    <button class="action-btn stop" onclick="stopRobot()">stop robot</button>
+  </div>
+
+  <div>
+    <div class="section-label">Stats</div>
+    <div class="stat-grid">
+      <div class="stat-box"><div class="label">waypoints</div><div class="value" id="stat-wp">0</div></div>
+      <div class="stat-box"><div class="label">path len</div><div class="value" id="stat-len">0.0 m</div></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="section-label">Log</div>
+    <div class="log" id="log"></div>
+  </div>
+</aside>
+
+<main id="canvas-container">
+  <canvas id="canvas"></canvas>
+  <svg id="robot-marker" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="10" cy="10" r="8" fill="rgba(124,111,205,0.2)" stroke="#9d92e0" stroke-width="1.5"/>
+    <circle cx="10" cy="10" r="3" fill="#9d92e0"/>
+    <line x1="10" y1="10" x2="10" y2="2" stroke="#9d92e0" stroke-width="1.5" stroke-linecap="round" id="robot-heading"/>
+  </svg>
+  <div class="coord-readout" id="coord-readout">x — y —</div>
+  <div class="flash" id="flash"></div>
+</main>
+
+<script>
+// ─── State ────────────────────────────────────────────────
+let ros = null, pathPub = null, cmdPub = null, stopPub = null, odomSub = null, paramClient = null;
+let connected = false, drawing = false, tool = 'draw';
+let rawPoints = [];
+let robotX = 0, robotY = 0, robotYaw = 0;
+
+const canvas    = document.getElementById('canvas');
+const ctx       = canvas.getContext('2d');
+const container = document.getElementById('canvas-container');
+
+// ─── Canvas resize ────────────────────────────────────────
+function resizeCanvas() {
+  canvas.width  = container.clientWidth;
+  canvas.height = container.clientHeight;
+  redraw();
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+// ─── ROS connection ───────────────────────────────────────
+function connectROS() {
+  const url = document.getElementById('ws-url').value;
+  if (ros) ros.close();
+  log('connecting to ' + url);
+  ros = new ROSLIB.Ros({ url });
+  ros.on('connection', () => {
+    connected = true;
+    setStatus('connected', true);
+    document.getElementById('send-btn').disabled = false;
+    setupTopics();
+    log('rosbridge connected', 'ok');
+  });
+  ros.on('error',  e  => { setStatus('error', false, true); log('error: ' + e, 'err'); });
+  ros.on('close',  () => {
+    connected = false;
+    setStatus('disconnected', false);
+    document.getElementById('send-btn').disabled = true;
+    log('disconnected', 'err');
+  });
+}
+
+function setupTopics() {
+  pathPub = new ROSLIB.Topic({ ros, name: '/sketch_path',  messageType: 'nav_msgs/Path' });
+  cmdPub  = new ROSLIB.Topic({ ros, name: '/cmd_vel',      messageType: 'geometry_msgs/Twist' });
+  // Dedicated stop topic — pure_pursuit subscribes to this and sets active=False
+  stopPub = new ROSLIB.Topic({ ros, name: '/sketch_stop',  messageType: 'std_msgs/Bool' });
+  odomSub = new ROSLIB.Topic({ ros, name: '/odom',         messageType: 'nav_msgs/Odometry' });
+  odomSub.subscribe(handleOdom);
+
+  paramClient = new ROSLIB.Service({
+    ros,
+    name: '/pure_pursuit/set_parameters',
+    serviceType: 'rcl_interfaces/SetParameters'
+  });
+
+  log('topics ready', 'ok');
+}
+
+function setStatus(text, ok, err) {
+  document.getElementById('status-text').textContent = text;
+  document.getElementById('status-pill').className   = 'status-pill' + (ok ? ' connected' : err ? ' error' : '');
+  document.getElementById('status-dot').className    = 'dot' + (ok ? ' pulse' : '');
+}
+
+// ─── Slider sync ──────────────────────────────────────────
+let sliderTimer = null;
+function onSliderChange() {
+  const ld  = parseFloat(document.getElementById('sl-lookahead').value);
+  const spd = parseFloat(document.getElementById('sl-speed').value);
+  document.getElementById('val-lookahead').textContent = ld.toFixed(2)  + ' m';
+  document.getElementById('val-speed').textContent     = spd.toFixed(2) + ' m/s';
+  if (!connected || !paramClient) return;
+  clearTimeout(sliderTimer);
+  sliderTimer = setTimeout(() => pushParams(ld, spd), 300);
+}
+
+function onScaleChange() {
+  const s = parseFloat(document.getElementById('sl-scale').value);
+  document.getElementById('val-scale').textContent = s.toFixed(2) + ' m/px';
+  updateStats();
+  redraw();
+}
+
+function pushParams(lookahead, maxSpeed) {
+  const req = new ROSLIB.ServiceRequest({
+    parameters: [
+      { name: 'lookahead_distance', value: { type: 3, double_value: lookahead } },
+      { name: 'max_linear_speed',   value: { type: 3, double_value: maxSpeed  } }
+    ]
+  });
+  paramClient.callService(
+    req,
+    res => {
+      const ok = res.results.every(r => r.successful);
+      log(`params → lookahead ${lookahead.toFixed(2)} m  speed ${maxSpeed.toFixed(2)} m/s`, ok ? 'ok' : 'err');
+    },
+    err => log('param set failed: ' + err, 'err')
+  );
+}
+
+// ─── Odometry ─────────────────────────────────────────────
+function handleOdom(msg) {
+  const p = msg.pose.pose.position, q = msg.pose.pose.orientation;
+  robotX = p.x; robotY = p.y;
+  robotYaw = Math.atan2(2*(q.w*q.z + q.x*q.y), 1 - 2*(q.y*q.y + q.z*q.z));
+  document.getElementById('odom-x').textContent  = p.x.toFixed(2);
+  document.getElementById('odom-y').textContent  = p.y.toFixed(2);
+  document.getElementById('odom-th').textContent = (robotYaw * 180 / Math.PI).toFixed(1) + '°';
+  updateRobotMarker();
+}
+
+function worldToPixel(wx, wy) {
+  const s = parseFloat(document.getElementById('sl-scale').value);
+  return { x: canvas.width/2 + wx/s, y: canvas.height/2 - wy/s };
+}
+function pixelToWorld(px, py) {
+  const s = parseFloat(document.getElementById('sl-scale').value);
+  return { x: (px - canvas.width/2)*s, y: (canvas.height/2 - py)*s };
+}
+
+function updateRobotMarker() {
+  const px = worldToPixel(robotX, robotY);
+  const m  = document.getElementById('robot-marker');
+  m.style.display = 'block';
+  m.style.left    = px.x + 'px';
+  m.style.top     = px.y + 'px';
+  const r = 8;
+  document.getElementById('robot-heading').setAttribute('x2', (10 + r * Math.cos(Math.PI/2 - robotYaw)).toFixed(1));
+  document.getElementById('robot-heading').setAttribute('y2', (10 - r * Math.sin(Math.PI/2 - robotYaw)).toFixed(1));
+  redraw();
+}
+
+// ─── Drawing ──────────────────────────────────────────────
+container.addEventListener('mousedown', e => {
+  if (tool !== 'draw') return;
+  drawing = true; rawPoints = [];
+  const r = container.getBoundingClientRect();
+  addPoint(e.clientX - r.left, e.clientY - r.top);
+});
+container.addEventListener('mousemove', e => {
+  const r  = container.getBoundingClientRect();
+  const px = e.clientX - r.left, py = e.clientY - r.top;
+  const w  = pixelToWorld(px, py);
+  document.getElementById('coord-readout').textContent = `x ${w.x.toFixed(2)}  y ${w.y.toFixed(2)}`;
+  if (drawing) addPoint(px, py);
+});
+container.addEventListener('mouseup',    () => { drawing = false; updateStats(); });
+container.addEventListener('mouseleave', () => { drawing = false; });
+
+container.addEventListener('touchstart', e => {
+  e.preventDefault(); if (tool !== 'draw') return;
+  drawing = true; rawPoints = [];
+  const t = e.touches[0], r = container.getBoundingClientRect();
+  addPoint(t.clientX - r.left, t.clientY - r.top);
+}, { passive: false });
+container.addEventListener('touchmove', e => {
+  e.preventDefault(); if (!drawing) return;
+  const t = e.touches[0], r = container.getBoundingClientRect();
+  addPoint(t.clientX - r.left, t.clientY - r.top);
+}, { passive: false });
+container.addEventListener('touchend', () => { drawing = false; updateStats(); });
+
+function addPoint(x, y) {
+  if (rawPoints.length > 0) {
+    const l = rawPoints[rawPoints.length - 1];
+    if (Math.hypot(x - l.x, y - l.y) < 8) return;
+  }
+  rawPoints.push({ x, y }); redraw();
+}
+
+// ─── Catmull-Rom smoothing ────────────────────────────────
+function catmullRom(pts, segs = 12) {
+  if (pts.length < 2) return pts;
+  const result = [];
+  const p = [pts[0], ...pts, pts[pts.length - 1]];
+  for (let i = 1; i < p.length - 2; i++) {
+    for (let t = 0; t <= 1; t += 1/segs) {
+      const t2 = t*t, t3 = t2*t;
+      result.push({
+        x: 0.5*((2*p[i].x)+(-p[i-1].x+p[i+1].x)*t+(2*p[i-1].x-5*p[i].x+4*p[i+1].x-p[i+2].x)*t2+(-p[i-1].x+3*p[i].x-3*p[i+1].x+p[i+2].x)*t3),
+        y: 0.5*((2*p[i].y)+(-p[i-1].y+p[i+1].y)*t+(2*p[i-1].y-5*p[i].y+4*p[i+1].y-p[i+2].y)*t2+(-p[i-1].y+3*p[i].y-3*p[i+1].y+p[i+2].y)*t3)
+      });
+    }
+  }
+  result.push(pts[pts.length - 1]);
+  return result;
+}
+function getDisplayPoints() {
+  if (rawPoints.length < 2) return rawPoints;
+  return document.getElementById('smooth-toggle').checked ? catmullRom(rawPoints) : rawPoints;
+}
+
+// ─── Redraw ───────────────────────────────────────────────
+function redraw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const cx = canvas.width/2, cy = canvas.height/2;
+
+  // 45° diagonal dot grid
+  const spacing = 28;
+  const diag    = Math.ceil(Math.hypot(canvas.width, canvas.height));
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(Math.PI / 4);
+  ctx.fillStyle = 'rgba(255,255,255,0.06)';
+  const cols = Math.ceil(diag / spacing) + 2;
+  for (let ix = -cols; ix <= cols; ix++) {
+    for (let iy = -cols; iy <= cols; iy++) {
+      ctx.beginPath();
+      ctx.arc(ix * spacing, iy * spacing, 1, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  ctx.restore();
+
+  // Origin
+  ctx.fillStyle = 'rgba(255,255,255,0.18)';
+  ctx.beginPath(); ctx.arc(cx, cy, 3, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,0.15)';
+  ctx.font = '10px DM Mono, monospace';
+  ctx.fillText('origin', cx + 6, cy - 6);
+
+  if (!rawPoints.length) return;
+  const pts = getDisplayPoints();
+
+  // Ghost when smoothing
+  if (document.getElementById('smooth-toggle').checked && rawPoints.length > 1) {
+    ctx.strokeStyle = 'rgba(124,111,205,0.12)'; ctx.lineWidth = 1; ctx.setLineDash([3,6]);
+    ctx.beginPath(); rawPoints.forEach((p,i) => i===0 ? ctx.moveTo(p.x,p.y) : ctx.lineTo(p.x,p.y));
+    ctx.stroke(); ctx.setLineDash([]);
+  }
+
+  if (pts.length > 1) {
+    ctx.shadowColor = 'rgba(124,111,205,0.4)'; ctx.shadowBlur = 10;
+    ctx.strokeStyle = 'rgba(124,111,205,0.22)'; ctx.lineWidth = 7;
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.beginPath(); pts.forEach((p,i) => i===0 ? ctx.moveTo(p.x,p.y) : ctx.lineTo(p.x,p.y));
+    ctx.stroke(); ctx.shadowBlur = 0;
+    ctx.strokeStyle = '#9d92e0'; ctx.lineWidth = 2;
+    ctx.beginPath(); pts.forEach((p,i) => i===0 ? ctx.moveTo(p.x,p.y) : ctx.lineTo(p.x,p.y));
+    ctx.stroke();
+    drawArrows(pts);
+  }
+
+  rawPoints.forEach((p, i) => {
+    const first = i === 0, last = i === rawPoints.length-1;
+    ctx.beginPath(); ctx.arc(p.x, p.y, first||last ? 5 : 3, 0, Math.PI*2);
+    ctx.fillStyle = first ? '#9d92e0' : last ? '#fff' : 'rgba(157,146,224,0.5)';
+    ctx.fill();
+  });
+
+  ctx.font = '10px DM Mono, monospace';
+  ctx.fillStyle = '#9d92e0';
+  ctx.fillText('start', rawPoints[0].x + 8, rawPoints[0].y - 6);
+  if (rawPoints.length > 1) {
+    ctx.fillStyle = 'rgba(255,255,255,0.55)';
+    ctx.fillText('end', rawPoints[rawPoints.length-1].x + 8, rawPoints[rawPoints.length-1].y - 6);
+  }
+}
+
+function drawArrows(pts) {
+  const step = Math.max(1, Math.floor(pts.length / 6));
+  ctx.fillStyle = 'rgba(157,146,224,0.75)';
+  for (let i = step; i < pts.length-1; i += step) {
+    const angle = Math.atan2(pts[i].y - pts[i-1].y, pts[i].x - pts[i-1].x);
+    ctx.save(); ctx.translate(pts[i].x, pts[i].y); ctx.rotate(angle);
+    ctx.beginPath(); ctx.moveTo(6,0); ctx.lineTo(-3,4); ctx.lineTo(-3,-4);
+    ctx.closePath(); ctx.fill(); ctx.restore();
+  }
+}
+
+// ─── Stats ────────────────────────────────────────────────
+function updateStats() {
+  document.getElementById('stat-wp').textContent = rawPoints.length;
+  if (rawPoints.length < 2) { document.getElementById('stat-len').textContent = '0.0 m'; return; }
+  const s = parseFloat(document.getElementById('sl-scale').value);
+  let len = 0;
+  for (let i = 1; i < rawPoints.length; i++)
+    len += Math.hypot(rawPoints[i].x-rawPoints[i-1].x, rawPoints[i].y-rawPoints[i-1].y);
+  document.getElementById('stat-len').textContent = (len*s).toFixed(1) + ' m';
+}
+document.getElementById('smooth-toggle').addEventListener('change', () => { redraw(); updateStats(); });
+
+// ─── Send path ────────────────────────────────────────────
+function sendPath() {
+  if (!connected || rawPoints.length < 2) { log('need ≥2 points and a connection', 'err'); return; }
+  const pts   = getDisplayPoints();
+  const secs  = Math.floor(Date.now() / 1000);
+  const nsecs = (Date.now() % 1000) * 1e6;
+
+  const poses = pts.map((p, i) => {
+    const w = pixelToWorld(p.x, p.y);
+    let yaw = 0;
+    if (i < pts.length-1) {
+      const n = pixelToWorld(pts[i+1].x, pts[i+1].y);
+      yaw = Math.atan2(n.y-w.y, n.x-w.x);
+    } else if (i > 0) {
+      const pr = pixelToWorld(pts[i-1].x, pts[i-1].y);
+      yaw = Math.atan2(w.y-pr.y, w.x-pr.x);
+    }
+    return {
+      header: { stamp: { secs, nsecs }, frame_id: 'map' },
+      pose: {
+        position:    { x: w.x, y: w.y, z: 0 },
+        orientation: { x: 0, y: 0, z: Math.sin(yaw/2), w: Math.cos(yaw/2) }
+      }
+    };
+  });
+
+  pathPub.publish(new ROSLIB.Message({ header: { stamp: { secs, nsecs }, frame_id: 'map' }, poses }));
+  flash();
+  log(`published ${poses.length} poses → /sketch_path`, 'ok');
+}
+
+// ─── Stop robot ───────────────────────────────────────────
+function stopRobot() {
+  if (!connected) { log('not connected', 'err'); return; }
+  // 1. Tell pure_pursuit to deactivate via dedicated topic
+  stopPub.publish(new ROSLIB.Message({ data: true }));
+  // 2. Also send zero twist directly in case node is slow to respond
+  const zero = new ROSLIB.Message({ linear:{x:0,y:0,z:0}, angular:{x:0,y:0,z:0} });
+  cmdPub.publish(zero);
+  log('stop → /sketch_stop + /cmd_vel', 'ok');
+}
+
+// ─── Helpers ──────────────────────────────────────────────
+function setTool(t) {
+  tool = t;
+  document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+  if (t === 'draw') document.getElementById('tool-draw').classList.add('active');
+}
+function clearCanvas() { rawPoints = []; redraw(); updateStats(); log('canvas cleared'); }
+function flash() {
+  const el = document.getElementById('flash');
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 50);
+  setTimeout(() => el.style.transition = 'opacity 0.5s', 60);
+}
+function log(msg, type) {
+  const el  = document.getElementById('log');
+  const div = document.createElement('div');
+  div.className   = 'log-entry ' + (type||'');
+  div.textContent = `[${new Date().toLocaleTimeString('en-GB',{hour12:false})}] ${msg}`;
+  el.appendChild(div);
+  el.scrollTop = el.scrollHeight;
+  while (el.children.length > 60) el.removeChild(el.firstChild);
+}
+
+log('sketch2nav ready', 'ok');
+log('connect to rosbridge to begin');
+</script>
+</body>
+</html>

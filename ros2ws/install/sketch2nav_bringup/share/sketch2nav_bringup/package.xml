@@ -1,0 +1,21 @@
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+<name>sketch2nav_bringup</name>
+<version>0.1.0</version>
+<description>Bringup launch files for sketch2nav using webUI</description>
+<maintainer email="danielpawlak@github.com">pawlak</maintainer>
+<license>MIT</license>
+<buildtool_depend>ament_python</buildtool_depend>
+<!--  Runtime deps  -->
+<exec_depend>rclpy</exec_depend>
+<exec_depend>ros_gz_sim</exec_depend>
+<exec_depend>ros_gz_bridge</exec_depend>
+<exec_depend>rosbridge_server</exec_depend>
+<test_depend>ament_copyright</test_depend>
+<test_depend>ament_flake8</test_depend>
+<test_depend>ament_pep257</test_depend>
+<test_depend>pytest</test_depend>
+<export>
+<build_type>ament_python</build_type>
+</export>
+</package>

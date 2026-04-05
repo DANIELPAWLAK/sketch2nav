@@ -1,0 +1,39 @@
+[0.842s] Invoking command in '/home/pawlak/sketch2nav/ros2ws/src/sketch2nav_bringup': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/pawlak/sketch2nav/ros2ws/build/sketch2nav_bringup/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/sketch2nav_bringup build --build-base /home/pawlak/sketch2nav/ros2ws/build/sketch2nav_bringup/build install --record /home/pawlak/sketch2nav/ros2ws/build/sketch2nav_bringup/install.log --single-version-externally-managed install_data
+[0.943s] running egg_info
+[0.943s] creating ../../build/sketch2nav_bringup/sketch2nav_bringup.egg-info
+[0.948s] writing ../../build/sketch2nav_bringup/sketch2nav_bringup.egg-info/PKG-INFO
+[0.948s] writing dependency_links to ../../build/sketch2nav_bringup/sketch2nav_bringup.egg-info/dependency_links.txt
+[0.948s] writing requirements to ../../build/sketch2nav_bringup/sketch2nav_bringup.egg-info/requires.txt
+[0.948s] writing top-level names to ../../build/sketch2nav_bringup/sketch2nav_bringup.egg-info/top_level.txt
+[0.948s] writing manifest file '../../build/sketch2nav_bringup/sketch2nav_bringup.egg-info/SOURCES.txt'
+[0.959s] reading manifest file '../../build/sketch2nav_bringup/sketch2nav_bringup.egg-info/SOURCES.txt'
+[0.960s] writing manifest file '../../build/sketch2nav_bringup/sketch2nav_bringup.egg-info/SOURCES.txt'
+[0.960s] running build
+[0.960s] running build_py
+[0.960s] creating /home/pawlak/sketch2nav/ros2ws/build/sketch2nav_bringup/build
+[0.960s] creating /home/pawlak/sketch2nav/ros2ws/build/sketch2nav_bringup/build/lib
+[0.960s] creating /home/pawlak/sketch2nav/ros2ws/build/sketch2nav_bringup/build/lib/sketch2nav_bringup
+[0.960s] copying sketch2nav_bringup/__init__.py -> /home/pawlak/sketch2nav/ros2ws/build/sketch2nav_bringup/build/lib/sketch2nav_bringup
+[0.960s] running install
+[0.962s] running install_lib
+[0.968s] creating /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/lib/python3.12/site-packages/sketch2nav_bringup
+[0.968s] copying /home/pawlak/sketch2nav/ros2ws/build/sketch2nav_bringup/build/lib/sketch2nav_bringup/__init__.py -> /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/lib/python3.12/site-packages/sketch2nav_bringup
+[0.968s] byte-compiling /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/lib/python3.12/site-packages/sketch2nav_bringup/__init__.py to __init__.cpython-312.pyc
+[0.968s] running install_data
+[0.968s] creating /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/share/ament_index
+[0.969s] creating /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/share/ament_index/resource_index
+[0.969s] creating /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/share/ament_index/resource_index/packages
+[0.969s] copying resource/sketch2nav_bringup -> /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/share/ament_index/resource_index/packages
+[0.969s] copying package.xml -> /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/share/sketch2nav_bringup
+[0.969s] creating /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/share/sketch2nav_bringup/launch
+[0.969s] creating /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/share/sketch2nav_bringup/worlds
+[0.969s] copying worlds/empty.sdf -> /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/share/sketch2nav_bringup/worlds
+[0.969s] creating /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/share/sketch2nav_bringup/models
+[0.969s] creating /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/share/sketch2nav_bringup/models/sketch2nav
+[0.969s] copying models/sketch2nav/model.sdf -> /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/share/sketch2nav_bringup/models/sketch2nav
+[0.969s] creating /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/share/sketch2nav_bringup/config
+[0.969s] running install_egg_info
+[0.975s] Copying ../../build/sketch2nav_bringup/sketch2nav_bringup.egg-info to /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/lib/python3.12/site-packages/sketch2nav_bringup-0.1.0-py3.12.egg-info
+[0.975s] running install_scripts
+[1.016s] writing list of installed files to '/home/pawlak/sketch2nav/ros2ws/build/sketch2nav_bringup/install.log'
+[1.027s] Invoked command in '/home/pawlak/sketch2nav/ros2ws/src/sketch2nav_bringup' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/pawlak/sketch2nav/ros2ws/build/sketch2nav_bringup/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/pawlak/sketch2nav/ros2ws/install/sketch2nav_bringup/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/sketch2nav_bringup build --build-base /home/pawlak/sketch2nav/ros2ws/build/sketch2nav_bringup/build install --record /home/pawlak/sketch2nav/ros2ws/build/sketch2nav_bringup/install.log --single-version-externally-managed install_data

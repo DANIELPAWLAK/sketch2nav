@@ -1,0 +1,22 @@
+pure_pursuit:
+  ros__parameters:
+    # How far ahead on the path the robot aims at (metres).
+    # Larger = smoother but cuts corners more.
+    # Smaller = tighter tracking but can oscillate.
+    lookahead_distance: 0.5
+
+    # Forward speed cap (m/s). Start low (0.2) until tracking looks good.
+    max_linear_speed: 0.3
+
+    # Minimum forward speed — keeps the robot moving even on tight turns.
+    min_linear_speed: 0.05
+
+    # Stop when within this distance of the final waypoint (metres).
+    goal_tolerance: 0.15
+
+    # Multiplier on the curvature→angular velocity conversion.
+    # Increase if the robot under-steers, decrease if it over-steers.
+    angular_gain: 1.5
+
+    # Hard cap on angular velocity (rad/s).
+    max_angular_speed: 2.0

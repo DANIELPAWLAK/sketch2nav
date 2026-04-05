@@ -1,0 +1,21 @@
+[0.323s] Invoking command in '/home/pawlak/sketch2nav/ros2ws/src/sketch2nav_control': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/pawlak/sketch2nav/ros2ws/build/sketch2nav_control/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/pawlak/sketch2nav/ros2ws/install/sketch2nav_control/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/sketch2nav_control build --build-base /home/pawlak/sketch2nav/ros2ws/build/sketch2nav_control/build install --record /home/pawlak/sketch2nav/ros2ws/build/sketch2nav_control/install.log --single-version-externally-managed install_data
+[0.416s] running egg_info
+[0.421s] writing ../../build/sketch2nav_control/sketch2nav_control.egg-info/PKG-INFO
+[0.422s] writing dependency_links to ../../build/sketch2nav_control/sketch2nav_control.egg-info/dependency_links.txt
+[0.422s] writing entry points to ../../build/sketch2nav_control/sketch2nav_control.egg-info/entry_points.txt
+[0.422s] writing requirements to ../../build/sketch2nav_control/sketch2nav_control.egg-info/requires.txt
+[0.422s] writing top-level names to ../../build/sketch2nav_control/sketch2nav_control.egg-info/top_level.txt
+[0.433s] reading manifest file '../../build/sketch2nav_control/sketch2nav_control.egg-info/SOURCES.txt'
+[0.434s] writing manifest file '../../build/sketch2nav_control/sketch2nav_control.egg-info/SOURCES.txt'
+[0.434s] running build
+[0.434s] running build_py
+[0.434s] running install
+[0.436s] running install_lib
+[0.442s] running install_data
+[0.442s] running install_egg_info
+[0.449s] removing '/home/pawlak/sketch2nav/ros2ws/install/sketch2nav_control/lib/python3.12/site-packages/sketch2nav_control-0.1.0-py3.12.egg-info' (and everything under it)
+[0.449s] Copying ../../build/sketch2nav_control/sketch2nav_control.egg-info to /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_control/lib/python3.12/site-packages/sketch2nav_control-0.1.0-py3.12.egg-info
+[0.449s] running install_scripts
+[0.491s] Installing pure_pursuit script to /home/pawlak/sketch2nav/ros2ws/install/sketch2nav_control/lib/sketch2nav_control
+[0.492s] writing list of installed files to '/home/pawlak/sketch2nav/ros2ws/build/sketch2nav_control/install.log'
+[0.504s] Invoked command in '/home/pawlak/sketch2nav/ros2ws/src/sketch2nav_control' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/pawlak/sketch2nav/ros2ws/build/sketch2nav_control/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/pawlak/sketch2nav/ros2ws/install/sketch2nav_control/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/sketch2nav_control build --build-base /home/pawlak/sketch2nav/ros2ws/build/sketch2nav_control/build install --record /home/pawlak/sketch2nav/ros2ws/build/sketch2nav_control/install.log --single-version-externally-managed install_data
