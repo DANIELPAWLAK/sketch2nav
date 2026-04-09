@@ -19,3 +19,16 @@ sketch2nav replaces traditional waypoint-entry interfaces with a freehand drawin
 ---
 ## Demo
 Coming Soon
+
+## Roadmap
+
+- [x] Robot model (URDF/SDF) and Gazebo simulation
+- [x] Teleop keyboard control
+- [x] Web UI for path drawing and sending
+- [x] Autonomous path following
+- [ ] Obstacle sketching 
+- [ ] Integration for obstacle-aware autonomous path following
+- [ ] Real-world coordinate calibration 
+- [ ] Hardware deployment with onboard odometry
+
+---
