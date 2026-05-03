@@ -8,23 +8,16 @@ import os
 
 def generate_launch_description():
     pkg_share = get_package_share_directory('sketch2nav_bringup')
-
     world = os.path.join(pkg_share, 'worlds', 'empty.sdf')
     model = os.path.join(pkg_share, 'models', 'sketch2nav', 'model.sdf')
-
-    # ── Args ──────────────────────────────────────────────────
     declare_x = DeclareLaunchArgument('x', default_value='0.0',
                                       description='Spawn X position')
     declare_y = DeclareLaunchArgument('y', default_value='0.0',
                                       description='Spawn Y position')
-
-    # ── Gazebo ────────────────────────────────────────────────
     gz_sim = ExecuteProcess(
         cmd=['gz', 'sim', '-r', world],
         output='screen'
     )
-
-    # ── Spawn rover (slight delay so Gazebo is ready) ─────────
     spawn = TimerAction(
         period=3.0,
         actions=[ExecuteProcess(
@@ -39,10 +32,6 @@ def generate_launch_description():
             output='screen'
         )]
     )
-
-    # ── ROS↔Gazebo bridge ─────────────────────────────────────
-    # cmd_vel: ROS → Gz  (web UI / teleop sends Twist in)
-    # odom:    Gz → ROS  (odometry comes out to web UI + follower)
     bridge = TimerAction(
         period=3.5,
         actions=[ExecuteProcess(
@@ -54,8 +43,6 @@ def generate_launch_description():
             output='screen'
         )]
     )
-
-    # ── rosbridge WebSocket (connects web UI) ─────────────────
     rosbridge = ExecuteProcess(
         cmd=[
             'ros2', 'launch', 'rosbridge_server',

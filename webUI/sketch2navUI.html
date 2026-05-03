@@ -279,7 +279,6 @@
 </main>
 
 <script>
-// ─── State ────────────────────────────────────────────────
 let ros = null, pathPub = null, cmdPub = null, stopPub = null, odomSub = null, paramClient = null;
 let connected = false, drawing = false, tool = 'draw';
 let rawPoints = [];
@@ -289,7 +288,6 @@ const canvas    = document.getElementById('canvas');
 const ctx       = canvas.getContext('2d');
 const container = document.getElementById('canvas-container');
 
-// ─── Canvas resize ────────────────────────────────────────
 function resizeCanvas() {
   canvas.width  = container.clientWidth;
   canvas.height = container.clientHeight;
@@ -298,7 +296,6 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-// ─── ROS connection ───────────────────────────────────────
 function connectROS() {
   const url = document.getElementById('ws-url').value;
   if (ros) ros.close();
@@ -323,7 +320,6 @@ function connectROS() {
 function setupTopics() {
   pathPub = new ROSLIB.Topic({ ros, name: '/sketch_path',  messageType: 'nav_msgs/Path' });
   cmdPub  = new ROSLIB.Topic({ ros, name: '/cmd_vel',      messageType: 'geometry_msgs/Twist' });
-  // Dedicated stop topic — pure_pursuit subscribes to this and sets active=False
   stopPub = new ROSLIB.Topic({ ros, name: '/sketch_stop',  messageType: 'std_msgs/Bool' });
   odomSub = new ROSLIB.Topic({ ros, name: '/odom',         messageType: 'nav_msgs/Odometry' });
   odomSub.subscribe(handleOdom);
@@ -343,7 +339,6 @@ function setStatus(text, ok, err) {
   document.getElementById('status-dot').className    = 'dot' + (ok ? ' pulse' : '');
 }
 
-// ─── Slider sync ──────────────────────────────────────────
 let sliderTimer = null;
 function onSliderChange() {
   const ld  = parseFloat(document.getElementById('sl-lookahead').value);
@@ -379,7 +374,6 @@ function pushParams(lookahead, maxSpeed) {
   );
 }
 
-// ─── Odometry ─────────────────────────────────────────────
 function handleOdom(msg) {
   const p = msg.pose.pose.position, q = msg.pose.pose.orientation;
   robotX = p.x; robotY = p.y;
@@ -411,7 +405,6 @@ function updateRobotMarker() {
   redraw();
 }
 
-// ─── Drawing ──────────────────────────────────────────────
 container.addEventListener('mousedown', e => {
   if (tool !== 'draw') return;
   drawing = true; rawPoints = [];
@@ -449,7 +442,6 @@ function addPoint(x, y) {
   rawPoints.push({ x, y }); redraw();
 }
 
-// ─── Catmull-Rom smoothing ────────────────────────────────
 function catmullRom(pts, segs = 12) {
   if (pts.length < 2) return pts;
   const result = [];
@@ -471,12 +463,10 @@ function getDisplayPoints() {
   return document.getElementById('smooth-toggle').checked ? catmullRom(rawPoints) : rawPoints;
 }
 
-// ─── Redraw ───────────────────────────────────────────────
 function redraw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   const cx = canvas.width/2, cy = canvas.height/2;
 
-  // 45° diagonal dot grid
   const spacing = 28;
   const diag    = Math.ceil(Math.hypot(canvas.width, canvas.height));
   ctx.save();
@@ -493,7 +483,6 @@ function redraw() {
   }
   ctx.restore();
 
-  // Origin
   ctx.fillStyle = 'rgba(255,255,255,0.18)';
   ctx.beginPath(); ctx.arc(cx, cy, 3, 0, Math.PI * 2); ctx.fill();
   ctx.fillStyle = 'rgba(255,255,255,0.15)';
@@ -503,7 +492,6 @@ function redraw() {
   if (!rawPoints.length) return;
   const pts = getDisplayPoints();
 
-  // Ghost when smoothing
   if (document.getElementById('smooth-toggle').checked && rawPoints.length > 1) {
     ctx.strokeStyle = 'rgba(124,111,205,0.12)'; ctx.lineWidth = 1; ctx.setLineDash([3,6]);
     ctx.beginPath(); rawPoints.forEach((p,i) => i===0 ? ctx.moveTo(p.x,p.y) : ctx.lineTo(p.x,p.y));
@@ -549,7 +537,6 @@ function drawArrows(pts) {
   }
 }
 
-// ─── Stats ────────────────────────────────────────────────
 function updateStats() {
   document.getElementById('stat-wp').textContent = rawPoints.length;
   if (rawPoints.length < 2) { document.getElementById('stat-len').textContent = '0.0 m'; return; }
@@ -561,7 +548,6 @@ function updateStats() {
 }
 document.getElementById('smooth-toggle').addEventListener('change', () => { redraw(); updateStats(); });
 
-// ─── Send path ────────────────────────────────────────────
 function sendPath() {
   if (!connected || rawPoints.length < 2) { log('need ≥2 points and a connection', 'err'); return; }
   const pts   = getDisplayPoints();
@@ -592,7 +578,6 @@ function sendPath() {
   log(`published ${poses.length} poses → /sketch_path`, 'ok');
 }
 
-// ─── Stop robot ───────────────────────────────────────────
 function stopRobot() {
   if (!connected) { log('not connected', 'err'); return; }
   // 1. Tell pure_pursuit to deactivate via dedicated topic
@@ -603,7 +588,6 @@ function stopRobot() {
   log('stop → /sketch_stop + /cmd_vel', 'ok');
 }
 
-// ─── Helpers ──────────────────────────────────────────────
 function setTool(t) {
   tool = t;
   document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
