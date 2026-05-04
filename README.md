@@ -18,8 +18,7 @@ sketch2nav replaces traditional waypoint-entry interfaces with a freehand drawin
 - Gazebo Harmonic simulation with full ROS2 bridge for `cmd_vel` and `odom`
 ---
 ## Demo
-Coming Soon
-
+![demo](media/demoPathPursuit.gif)
 ## Roadmap
 
 - [x] Robot model (URDF/SDF) and Gazebo simulation
